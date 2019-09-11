@@ -1,4 +1,4 @@
-package org.techtown.database;
+package com.example.memo;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,11 +19,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         println("onCreate 호출됨");
 
         //emp 라는 테이블 생성..
-        String sql = "create table if not exists emp("
-                + " _id integer PRIMARY KEY autoincrement, "
-                + " name text, "
-                + " age integer, "
-                + " mobile text)";
+        String sql = "create table if not exists memo("
+                + " num integer PRIMARY KEY autoincrement, "
+                + " id text, "
+                + " title text, "
+                + " date text, "
+                + " content text)";
 
         db.execSQL(sql);
     }

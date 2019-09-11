@@ -1,4 +1,4 @@
-package com.example.p537;
+package com.example.memo;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;

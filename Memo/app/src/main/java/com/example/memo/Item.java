@@ -1,16 +1,29 @@
-package com.example.p536;
+package com.example.memo;
 
 import java.io.Serializable;
 
 public class Item implements Serializable {
+    Integer num;
     String title;
     String date;
     String content;
 
-    public Item(String title, String date, String content) {
+    public Item() {
+    }
+
+    public Item(Integer num, String title, String date, String content) {
+        this.num = num;
         this.title = title;
         this.date = date;
         this.content = content;
+    }
+
+    public Integer getNum() {
+        return num;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
     }
 
     public String getTitle() {
