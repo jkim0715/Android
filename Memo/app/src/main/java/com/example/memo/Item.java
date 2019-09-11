@@ -8,6 +8,12 @@ public class Item implements Serializable {
     String date;
     String content;
 
+    public Item(String title, String date, String content) {
+        this.title = title;
+        this.date = date;
+        this.content = content;
+    }
+
     public Item() {
     }
 

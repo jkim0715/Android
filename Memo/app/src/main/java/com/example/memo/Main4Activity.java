@@ -54,7 +54,9 @@ public class Main4Activity extends AppCompatActivity {
         }
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-           Log.i("tttttt",alist.get(i).getNum());
+           Log.i("tttttt",alist.get(i).title);
+            Log.i("tttttt",alist.get(i).date);
+            Log.i("tttttt",alist.get(i).content);
             View myview = null;
             LayoutInflater layoutInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             myview = layoutInflater.inflate(R.layout.layout,listcontainer,true);
@@ -62,8 +64,9 @@ public class Main4Activity extends AppCompatActivity {
             TextView tx5 =findViewById(R.id.textView5);
             TextView tx6 = findViewById(R.id.textView6);
 //            tx4.setText(alist.get(i).num+"");
-            tx5.setText(alist.get(i).title+"");
-            tx6.setText(alist.get(i).date+"");
+            tx4.setText(alist.get(i).title+"");
+            tx5.setText(alist.get(i).date+"");
+            tx6.setText(alist.get(i).content+"");
             return myview;
         }
     }

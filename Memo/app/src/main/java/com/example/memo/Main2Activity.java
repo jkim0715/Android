@@ -41,7 +41,7 @@ public class Main2Activity extends AppCompatActivity {
         // 이때 DB 생성.
         dbHelper = new DatabaseHelper(this);
         database = dbHelper.getWritableDatabase();
-
+        dbHelper.onUpgrade(database,1,1);
         dbHelper.onCreate(database);
 
     }
@@ -71,17 +71,19 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void list(View view) {
-        Cursor cursor = database.rawQuery("select num,title,date,content from memo", null);
+        Cursor cursor = database.rawQuery("select title,date,content from memo", null);
         int recordCount = cursor.getCount();
         arrayList = new ArrayList<>();
         for (int i = 0; i < recordCount; i++) {
             cursor.moveToNext();
-            int num = cursor.getInt(0);
-            String id = cursor.getString(1);
-            String title = cursor.getString(2);
-            String content = cursor.getString(3);
-            Log.i("test",id+title);
-            arrayList.add(new Item(num, id, title, content));
+//            int num = cursor.getInt(0);
+
+            String title = cursor.getString(0);
+         
+            String date = cursor.getString(1);
+            String content = cursor.getString(2);
+
+            arrayList.add(new Item(title,date, content));
         }
         Intent intent = new Intent(this, Main4Activity.class);
         intent.putExtra("list", arrayList);

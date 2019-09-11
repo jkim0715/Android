@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         //업그레이드 방식은.. 삭제 후 다시 만드는 방식으로 진행...
         if (newVersion > 1) {
-            db.execSQL("DROP TABLE IF EXISTS emp");
+            db.execSQL("DROP TABLE IF EXISTS memo");
         }
     }
 
