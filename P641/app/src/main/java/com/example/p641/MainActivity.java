@@ -16,21 +16,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mediaPlayer != null){
+            releaseMedia();
+        }
+    }
+
     public void releaseMedia(){
         if(mediaPlayer != null){
             mediaPlayer.release();
         }
     }
-    public void play(View view){
+    public void playAudio(){
         releaseMedia();
         mediaPlayer = MediaPlayer.create(MainActivity.this,R.raw.kalimba);
-//        try {
-//            mediaPlayer.prepare();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         mediaPlayer.start();
 
+    }
+    public void play(View view){
+    playAudio();
     }
     public void stop(View view){
         mediaPlayer.stop();
