@@ -1,4 +1,4 @@
-package com.example.p675;
+package com.example.p676;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -10,8 +10,10 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,18 +27,20 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends AppCompatActivity {
+    TextView textView;
     SupportMapFragment mapFragment;
     GoogleMap map;
     MarkerOptions myLocationMarker,myLocationMarker1;
+    Traveltask traveltask;
+    Double lat;
+    Double log;
 
-
-    TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.textView);
-
+        //Prepare Map
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //Permission for loc
+        //Ask Permission
         String[] permissions = {
                 Manifest.permission.ACCESS_FINE_LOCATION
         };
@@ -64,13 +68,13 @@ public class MainActivity extends AppCompatActivity {
         if (check == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this, "Accept", Toast.LENGTH_SHORT).show();
 
-            return;
+
         } else {
             Toast.makeText(this, "권한 부여가 안되어 있습니당", Toast.LENGTH_SHORT).show();
             return;
         }
+    }//END onCreate();
 
-    }//END onCreate
     public void startLocationService() {
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
             if (location != null) {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
+                lat = latitude;
+                log = longitude;
                 String message = "최근 위치 -> Latitude : " + latitude + "\nLongitude:" + longitude;
                 showCurrentLocation(latitude,longitude);
                 textView.setText(message);
@@ -87,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             // Ready to listen & response
             GPSListener gpsListener = new GPSListener();
             //interval
-            long minTime = 1000;
+            long minTime = 0;
             float minDistance = 0;
 
             //keep on updating current loc
@@ -100,18 +106,15 @@ public class MainActivity extends AppCompatActivity {
         } catch (SecurityException e) {
             e.printStackTrace();
         }
-    }
-
+    }//END StartLocServ
     class GPSListener implements LocationListener {
         public void onLocationChanged(Location location) {
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
             showCurrentLocation(latitude,longitude);
             String message = "내 위치 -> Latitude : " + latitude + "\nLongitude:" + longitude;
-
             textView.setText(message);
         }
-
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {}
         @Override
@@ -123,24 +126,46 @@ public class MainActivity extends AppCompatActivity {
     private void showCurrentLocation(Double latitude, Double longitude) {
         LatLng curPoint = new LatLng(latitude, longitude);
         map.animateCamera(CameraUpdateFactory.newLatLngZoom(curPoint, 15));
-
         showMyLocationMarker(curPoint);
     }
     private void showMyLocationMarker(LatLng curPoint) {
-        LatLng curPoint2 = new LatLng(curPoint.latitude+0.001, curPoint.longitude+0.001);
-
-            myLocationMarker = new MarkerOptions();
-            myLocationMarker1 = new MarkerOptions();
+        myLocationMarker = new MarkerOptions();
             myLocationMarker.position(curPoint);
             myLocationMarker.title("● 내 위치\n");
             myLocationMarker.snippet("● GPS로 확인한 위치");
-            myLocationMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon2));
-            myLocationMarker1.position(curPoint2);
-            myLocationMarker1.icon(BitmapDescriptorFactory.fromResource(R.drawable.mylocation));
-            map.addMarker(myLocationMarker1);
+            myLocationMarker.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker1));
             map.addMarker(myLocationMarker);
 
     }
 
+    public void letsgo(View view){
+        String url ="http://70.12.60.106/Server/map.jsp?lat="+lat+"&log="+log;
+        traveltask = new Traveltask(url);
+        traveltask.execute();
+    }
+    class Traveltask extends AsyncTask<String,Void,String>{
+        String url;
 
+        public Traveltask(String url) {
+            this.url = url;
+        }
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String str = HttpHandler.getString(url);
+
+            return str;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
 }
