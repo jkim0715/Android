@@ -64,7 +64,11 @@ public class MainActivity extends AppCompatActivity {
 
     // THis part is kind of playing video
     public void resume(View view){
-        videoView.setVideoURI(Uri.parse(VIDEO_URL));
+//        using URL
+//        videoView.setVideoURI(Uri.parse(VIDEO_URL));
+
+        Uri uri = Uri.parse("android.resource://"+getPackageName()+"/"+R.raw.sample_video);
+        videoView.setVideoURI(uri);
         videoView.requestFocus();
         videoView.start();
     }
