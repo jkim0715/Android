@@ -1,6 +1,4 @@
-package com.example.p535;
-
-import android.util.Log;
+package com.example.p537;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
