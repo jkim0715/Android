@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     TextView textView;
-  
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         try {
+            //Firstly getting  a current location by latitude / longitude
             Location location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
                 double latitude = location.getLatitude();
@@ -55,14 +56,15 @@ public class MainActivity extends AppCompatActivity {
 
                 textView.setText(message);
             }
-
+            // Ready to listen & response
             GPSListener gpsListener = new GPSListener();
+            //interval
             long minTime = 10000;
             float minDistance = 0;
 
-            manager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    minTime, minDistance, gpsListener);
+            //keep on updating current loc
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,minTime, minDistance, gpsListener);
+
 
             Toast.makeText(getApplicationContext(), "내 위치확인 요청함",
                     Toast.LENGTH_SHORT).show();
