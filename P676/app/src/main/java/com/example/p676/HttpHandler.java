@@ -1,5 +1,7 @@
 package com.example.p676;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,8 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HttpHandler {
-    public static String getString(String urlstr){
-        String result = null;
+    public static LatLng getString(String urlstr){
+       LatLng result = null;
         URL url = null;
         HttpURLConnection httpURLConnection = null;
         InputStream is = null;
@@ -35,19 +37,23 @@ public class HttpHandler {
         return result;
     }
 
-    public static String convertStr(InputStream is){
+    public static LatLng convertStr(InputStream is){
 
         BufferedReader br = null;
         br = new BufferedReader(new InputStreamReader(is));
         StringBuilder sb =new StringBuilder();
 
-        String temp;
+        String lat;
+        String log;
+        LatLng pt = null;
         try{
-
-            while((temp = br.readLine()) != null){
-                //여기서 각각의 object들을 붙여서 JSON Array형식으로 만들어준거임
-                sb.append(temp);
-            };
+            while(br.readLine() != null) {
+                lat = br.readLine();
+                System.out.println("lat:" + lat);
+                log = br.readLine();
+                System.out.println("log:" + log);
+                pt = new LatLng(Double.parseDouble(lat), Double.parseDouble(log));
+            }
         }catch(Exception e){
             e.printStackTrace();
         }finally {
@@ -58,7 +64,7 @@ public class HttpHandler {
                 e.printStackTrace();
             }
         }
-        return sb.toString();
+        return pt;
     }
 
 }

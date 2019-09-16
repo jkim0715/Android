@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         public void onLocationChanged(Location location) {
             Double latitude = location.getLatitude();
             Double longitude = location.getLongitude();
-            showCurrentLocation(latitude,longitude);
+            showCurrentLocation(lat,log);
             String message = "내 위치 -> Latitude : " + latitude + "\nLongitude:" + longitude;
             textView.setText(message);
         }
@@ -143,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         traveltask = new Traveltask(url);
         traveltask.execute();
     }
-    class Traveltask extends AsyncTask<String,Void,String>{
+    class Traveltask extends AsyncTask<String,Void,LatLng>{
         String url;
 
         public Traveltask(String url) {
@@ -152,20 +152,26 @@ public class MainActivity extends AppCompatActivity {
 
 
         @Override
-        protected String doInBackground(String... strings) {
-            String str = HttpHandler.getString(url);
+        protected LatLng doInBackground(String... strings) {
+            LatLng str = HttpHandler.getString(url);
 
             return str;
         }
 
         @Override
         protected void onPreExecute() {
-            super.onPreExecute();
+            map.clear();
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(LatLng s) {
+            System.out.println(s);
+
+            lat = s.latitude;
+            log = s.longitude;
+            showMyLocationMarker(s);
+             showCurrentLocation(s.latitude,s.longitude);
+
         }
     }
 }
